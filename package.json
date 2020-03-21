@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.0.0-beta.41",
+    "@apollo/react-ssr": "^4.0.0-beta.1",
     "@material-ui/core": "^4.9.7",
     "@material-ui/icons": "^4.9.1",
     "graphql": "^14.6.0",
@@ -29,6 +30,7 @@
     "@graphql-codegen/typescript-react-apollo": "1.13.1",
     "@types/node": "^13.9.2",
     "@types/react": "^16.9.23",
+    "@types/react-dom": "^16.9.5",
     "typescript": "^3.8.3"
   }
 }

@@ -31,5 +31,6 @@ export const client = new ApolloClient({
   link: authLink.concat(httpLink),
   cache: new InMemoryCache().restore(
     typeof window !== "undefined" ? (window as any).__APOLLO_STATE__ : undefined
-  )
+  ),
+  ssrMode: typeof window === "undefined"
 });

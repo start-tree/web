@@ -1,8 +1,6 @@
 import Link from "next/link";
 import React from "react";
-import { useProjectsQuery, ProjectsDocument } from "../apollo/generated";
-import { GetServerSideProps } from "next";
-import { client } from "../apollo";
+import { useProjectsQuery } from "../apollo/generated";
 
 const Index = () => {
   const { data, loading } = useProjectsQuery();
@@ -24,11 +22,6 @@ const Index = () => {
         ))}
     </div>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  await client.query({ query: ProjectsDocument });
-  return { props: {} };
 };
 
 export default Index;

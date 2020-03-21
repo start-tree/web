@@ -1,4 +1,6 @@
 import { ApolloProvider } from "@apollo/client";
+import { renderToString } from "react-dom/server";
+import { getDataFromTree } from "@apollo/react-ssr";
 import {
   AppBar,
   Button,
@@ -8,7 +10,7 @@ import {
   Typography
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
-import { AppProps } from "next/app";
+import App, { AppProps, AppContext } from "next/app";
 import Link from "next/link";
 import React, { useEffect } from "react";
 import { CookiesProvider, useCookies } from "react-cookie";
@@ -47,7 +49,9 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            News
+            <Link as="/" href="/">
+              <a>Home</a>
+            </Link>
           </Typography>
           {data && data.me ? (
             <Button color="inherit">Logout</Button>
@@ -68,8 +72,12 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
 const MyApp = ({ Component, pageProps }: AppProps) => {
   useEffect(() => {
     const jssStyles = document.querySelector("#jss-server-side");
+    const apolloState = document.querySelector("#apollo-state");
     if (jssStyles) {
       jssStyles.parentElement.removeChild(jssStyles);
+    }
+    if (apolloState) {
+      apolloState.parentElement.removeChild(apolloState);
     }
   }, []);
 
@@ -82,6 +90,20 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       </ApolloProvider>
     </CookiesProvider>
   );
+};
+
+MyApp.getInitialProps = async (appContext: AppContext) => {
+  const appProps = await App.getInitialProps(appContext);
+
+  if (!process.browser) {
+    await getDataFromTree(
+      <ApolloProvider client={client}>
+        <appContext.Component {...appProps.pageProps} />
+      </ApolloProvider>
+    );
+  }
+
+  return { ...appProps };
 };
 
 export default MyApp;
