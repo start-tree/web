@@ -1,19 +1,9 @@
-import React from "react";
-import { gql, useQuery } from "@apollo/client";
 import Link from "next/link";
-
-const projectsQuery = gql`
-  query Project {
-    projects {
-      id
-      title
-      description
-    }
-  }
-`;
+import React from "react";
+import { useProjectsQuery } from "../apollo/generated";
 
 const Index = () => {
-  const { loading, data } = useQuery(projectsQuery);
+  const { data, loading } = useProjectsQuery();
 
   if (loading) {
     return "Loading";
@@ -26,7 +16,7 @@ const Index = () => {
         data.projects.map(p => (
           <div key={p.id}>
             <Link as={`/projects/${p.id}`} href={`/projects/[id]`}>
-              {p.title}
+              <a>{p.title}</a>
             </Link>
           </div>
         ))}
