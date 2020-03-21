@@ -1,9 +1,9 @@
+import { Button, FormControl, makeStyles, TextField } from "@material-ui/core";
 import { useRouter } from "next/router";
-import { useForm } from "react-hook-form";
-import React, { useState } from "react";
+import React from "react";
 import { useCookies } from "react-cookie";
+import { useForm } from "react-hook-form";
 import { RegisterInput, useRegisterMutation } from "../apollo/generated";
-import { TextField, Button, FormControl, makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
   submitButton: {

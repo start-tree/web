@@ -1,57 +1,52 @@
+import { Button, FormControl, makeStyles, TextField } from "@material-ui/core";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React from "react";
 import { useCookies } from "react-cookie";
+import { useForm } from "react-hook-form";
 import { LoginInput, useLoginMutation } from "../apollo/generated";
 
+const useStyles = makeStyles(theme => ({
+  submitButton: {
+    marginTop: theme.spacing(2)
+  }
+}));
+
 const Login = () => {
+  const classes = useStyles();
   const router = useRouter();
   const [, setCookie] = useCookies(["token"]);
-  const [login] = useLoginMutation({
+  const [loginMutations] = useLoginMutation({
     onCompleted: data => {
       setCookie("token", data.login.token);
       router.push("/");
     }
   });
-  const [form, setForm] = useState<LoginInput>({ email: "", password: "" });
+  const { register, handleSubmit } = useForm<LoginInput>();
 
   return (
     <div>
       <form
-        onSubmit={e => {
-          e.preventDefault();
-
-          login({ variables: { input: form } });
-        }}
+        autoComplete="off"
+        onSubmit={handleSubmit(values => {
+          loginMutations({ variables: { input: values } });
+        })}
       >
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="text"
-            name="email"
-            onChange={e => {
-              setForm({
-                ...form,
-                [e.currentTarget.name]: e.currentTarget.value
-              });
-            }}
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
+        <FormControl fullWidth>
+          <TextField name="email" label="Email" inputRef={register} />
+        </FormControl>
+        <FormControl fullWidth>
+          <TextField
             type="password"
             name="password"
-            onChange={e => {
-              setForm({
-                ...form,
-                [e.currentTarget.name]: e.currentTarget.value
-              });
-            }}
+            label="Password"
+            inputRef={register}
           />
-        </div>
-        <div>
-          <button type="submit">Login</button>
-        </div>
+        </FormControl>
+        <FormControl className={classes.submitButton}>
+          <Button type="submit" variant="contained" color="primary">
+            Register
+          </Button>
+        </FormControl>
       </form>
     </div>
   );
