@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { gql, useMutation } from "@apollo/client";
+import { useRegisterMutation, RegisterInput } from "../apollo/generated";
 
 const registerMutation = gql`
   mutation Register($input: RegisterInput!) {
@@ -14,10 +15,16 @@ const registerMutation = gql`
 `;
 
 const Register = () => {
-  const [regiser, data] = useMutation(registerMutation);
-  const [form, setForm] = useState({});
-
-  console.log(data);
+  const [register] = useRegisterMutation({
+    onCompleted: data => {
+      console.log(data);
+    }
+  });
+  const [form, setForm] = useState<RegisterInput>({
+    name: "",
+    email: "",
+    password: ""
+  });
 
   return (
     <div>
@@ -25,7 +32,7 @@ const Register = () => {
         onSubmit={e => {
           e.preventDefault();
 
-          regiser({ variables: { input: form } });
+          register({ variables: { input: form } });
         }}
       >
         <div>
