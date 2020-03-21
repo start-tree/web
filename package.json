@@ -15,16 +15,17 @@
     "isomorphic-unfetch": "^3.0.0",
     "next": "^9.3.1",
     "react": "^16.13.0",
+    "react-cookie": "^4.0.3",
     "react-dom": "^16.13.0"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^1.13.1",
+    "@graphql-codegen/fragment-matcher": "1.13.1",
     "@graphql-codegen/typescript": "1.13.1",
     "@graphql-codegen/typescript-operations": "1.13.1",
     "@graphql-codegen/typescript-react-apollo": "1.13.1",
     "@types/node": "^13.9.2",
     "@types/react": "^16.9.23",
-    "typescript": "^3.8.3",
-    "@graphql-codegen/fragment-matcher": "1.13.1"
+    "typescript": "^3.8.3"
   }
 }

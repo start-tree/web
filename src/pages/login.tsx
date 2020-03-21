@@ -1,23 +1,18 @@
+import { useRouter } from "next/router";
 import React, { useState } from "react";
-import { gql, useMutation } from "@apollo/client";
-
-const loginMutation = gql`
-  mutation Login($input: LoginInput!) {
-    login(input: $input) {
-      token
-      user {
-        id
-        email
-      }
-    }
-  }
-`;
+import { useCookies } from "react-cookie";
+import { LoginInput, useLoginMutation } from "../apollo/generated";
 
 const Login = () => {
-  const [login, data] = useMutation(loginMutation);
-  const [form, setForm] = useState({});
-
-  console.log(data);
+  const router = useRouter();
+  const [, setCookie] = useCookies(["token"]);
+  const [login] = useLoginMutation({
+    onCompleted: data => {
+      setCookie("token", data.login.token);
+      router.push("/");
+    }
+  });
+  const [form, setForm] = useState<LoginInput>({ email: "", password: "" });
 
   return (
     <div>

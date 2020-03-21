@@ -1,23 +1,15 @@
+import { useRouter } from "next/router";
 import React, { useState } from "react";
-import { gql, useMutation } from "@apollo/client";
-import { useRegisterMutation, RegisterInput } from "../apollo/generated";
-
-const registerMutation = gql`
-  mutation Register($input: RegisterInput!) {
-    register(input: $input) {
-      token
-      user {
-        id
-        email
-      }
-    }
-  }
-`;
+import { useCookies } from "react-cookie";
+import { RegisterInput, useRegisterMutation } from "../apollo/generated";
 
 const Register = () => {
+  const router = useRouter();
+  const [, setCookie] = useCookies(["token"]);
   const [register] = useRegisterMutation({
     onCompleted: data => {
-      console.log(data);
+      setCookie("token", data.register.token);
+      router.push("/");
     }
   });
   const [form, setForm] = useState<RegisterInput>({
@@ -31,7 +23,6 @@ const Register = () => {
       <form
         onSubmit={e => {
           e.preventDefault();
-
           register({ variables: { input: form } });
         }}
       >
