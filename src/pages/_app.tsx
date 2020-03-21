@@ -96,11 +96,7 @@ MyApp.getInitialProps = async (appContext: AppContext) => {
   const appProps = await App.getInitialProps(appContext);
 
   if (!process.browser) {
-    await getDataFromTree(
-      <ApolloProvider client={client}>
-        <appContext.Component {...appProps.pageProps} />
-      </ApolloProvider>
-    );
+    await getDataFromTree(<appContext.AppTree {...appProps} />);
   }
 
   return { ...appProps };
