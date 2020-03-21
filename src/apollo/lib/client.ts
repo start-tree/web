@@ -10,7 +10,8 @@ import { Cookies } from "react-cookie";
 const authLink = new ApolloLink((operation, forward) => {
   const cookies = new Cookies();
   const token = cookies.get("token");
-  const headers: any = {};
+
+  const headers: any = { ...operation.getContext()?.headers };
 
   if (token) {
     headers.Authorization = `Bearer ${token}`;
@@ -28,5 +29,7 @@ const httpLink = createHttpLink({
 
 export const client = new ApolloClient({
   link: authLink.concat(httpLink),
-  cache: new InMemoryCache()
+  cache: new InMemoryCache().restore(
+    typeof window !== "undefined" ? (window as any).__APOLLO_STATE__ : undefined
+  )
 });

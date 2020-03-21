@@ -8,12 +8,12 @@ import {
   Typography
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
-import App, { AppContext, AppProps } from "next/app";
+import { AppProps } from "next/app";
+import Link from "next/link";
 import React, { useEffect } from "react";
-import { Cookies, CookiesProvider, useCookies } from "react-cookie";
+import { CookiesProvider, useCookies } from "react-cookie";
 import { client } from "../apollo";
 import { useMeQuery } from "../apollo/generated";
-import Link from "next/link";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -29,12 +29,10 @@ const useStyles = makeStyles(theme => ({
 
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
   const [{ token }] = useCookies(["token"]);
-  const { data, loading } = useMeQuery({ skip: !token });
+  const { data } = useMeQuery({
+    skip: !token
+  });
   const classes = useStyles();
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <div>
@@ -67,11 +65,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-type Props = {
-  cookiesRaw: String;
-} & AppProps;
-
-const MyApp = ({ Component, pageProps, cookiesRaw }: Props) => {
+const MyApp = ({ Component, pageProps }: AppProps) => {
   useEffect(() => {
     const jssStyles = document.querySelector("#jss-server-side");
     if (jssStyles) {
@@ -80,7 +74,7 @@ const MyApp = ({ Component, pageProps, cookiesRaw }: Props) => {
   }, []);
 
   return (
-    <CookiesProvider cookies={new Cookies(cookiesRaw)}>
+    <CookiesProvider>
       <ApolloProvider client={client}>
         <AppLayout>
           <Component {...pageProps} />
@@ -88,17 +82,6 @@ const MyApp = ({ Component, pageProps, cookiesRaw }: Props) => {
       </ApolloProvider>
     </CookiesProvider>
   );
-};
-
-MyApp.getInitialProps = async (appContext: AppContext) => {
-  const { pageProps } = await App.getInitialProps(appContext);
-
-  // TODO: need fetch me
-
-  return {
-    cookiesRaw: appContext.ctx.req?.headers?.cookie,
-    pageProps
-  };
 };
 
 export default MyApp;

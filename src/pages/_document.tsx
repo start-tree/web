@@ -7,6 +7,7 @@ import Document, {
   NextScript
 } from "next/document";
 import React from "react";
+import { client } from "../apollo";
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
@@ -30,12 +31,19 @@ class MyDocument extends Document {
   }
 
   render() {
+    const apolloState = JSON.stringify(client.extract());
+
     return (
       <Html>
         <Head>
           <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+          />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `window.__APOLLO_STATE__=${apolloState}`
+            }}
           />
         </Head>
         <body>
