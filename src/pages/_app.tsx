@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import { AppProps } from "next/app";
-import React from "react";
+import React, { useEffect } from "react";
 import { CookiesProvider } from "react-cookie";
 import { client } from "../apollo";
 
@@ -27,6 +27,13 @@ const useStyles = makeStyles(theme => ({
 
 const App = ({ Component, pageProps }: AppProps) => {
   const classes = useStyles();
+
+  useEffect(() => {
+    const jssStyles = document.querySelector("#jss-server-side");
+    if (jssStyles) {
+      jssStyles.parentElement.removeChild(jssStyles);
+    }
+  }, []);
 
   return (
     <CookiesProvider>
