@@ -1,7 +1,7 @@
+import { Container, makeStyles, Typography } from '@material-ui/core'
+import { useRouter } from 'next/router'
 import React from 'react'
 import { useProjectQuery } from '../../app/gql/generated'
-import { useRouter } from 'next/router'
-import { Container, Typography, makeStyles } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   container: {

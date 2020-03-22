@@ -1,4 +1,4 @@
-import { ApolloProvider } from '@apollo/client'
+import { ApolloProvider, useApolloClient } from '@apollo/client'
 import { getDataFromTree } from '@apollo/react-ssr'
 import { Container, Link, makeStyles, Typography } from '@material-ui/core'
 import App, { AppContext, AppProps } from 'next/app'
@@ -7,6 +7,7 @@ import React, { useEffect } from 'react'
 import { CookiesProvider, useCookies } from 'react-cookie'
 import { client } from '../app'
 import { useMeQuery } from '../app/gql/generated'
+import { useRouter } from 'next/router'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,11 +26,19 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
-  const [{ token }] = useCookies(['token'])
+  const [{ token }, , removeCookie] = useCookies(['token'])
   const { data } = useMeQuery({
     skip: !token,
   })
   const classes = useStyles()
+
+  const router = useRouter()
+  const client = useApolloClient()
+  const logout = () => {
+    removeCookie('token')
+    client.resetStore()
+    router.push('/')
+  }
 
   return (
     <Container>
@@ -38,7 +47,12 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
           <Link className={classes.navLink}>Home</Link>
         </NextLink>
         {data && data.me ? (
-          <Link className={classes.navLink}>Logout</Link>
+          <>
+            <Link onClick={() => logout()} className={classes.navLink}>
+              Logout
+            </Link>
+            <Link className={classes.navLink}>{data.me.name}</Link>
+          </>
         ) : (
           <>
             <NextLink as="/login" href="/login">
