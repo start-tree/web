@@ -1,37 +1,28 @@
-import { ServerStyleSheets } from "@material-ui/core";
-import Document, {
-  DocumentContext,
-  Head,
-  Html,
-  Main,
-  NextScript
-} from "next/document";
-import React from "react";
-import { client } from "../apollo";
+import { ServerStyleSheets } from '@material-ui/core'
+import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/document'
+import React from 'react'
+import { client } from '../apollo'
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
-    const sheets = new ServerStyleSheets();
-    const originalRenderPage = ctx.renderPage;
+    const sheets = new ServerStyleSheets()
+    const originalRenderPage = ctx.renderPage
 
     ctx.renderPage = () =>
       originalRenderPage({
-        enhanceApp: App => props => sheets.collect(<App {...props} />)
-      });
+        enhanceApp: (App) => (props) => sheets.collect(<App {...props} />),
+      })
 
-    const initialProps = await Document.getInitialProps(ctx);
+    const initialProps = await Document.getInitialProps(ctx)
 
     return {
       ...initialProps,
-      styles: [
-        ...React.Children.toArray(initialProps.styles),
-        sheets.getStyleElement()
-      ]
-    };
+      styles: [...React.Children.toArray(initialProps.styles), sheets.getStyleElement()],
+    }
   }
 
   render() {
-    const apolloState = JSON.stringify(client.extract());
+    const apolloState = JSON.stringify(client.extract())
 
     return (
       <Html>
@@ -43,7 +34,7 @@ class MyDocument extends Document {
           <script
             id="apollo-state"
             dangerouslySetInnerHTML={{
-              __html: `window.__APOLLO_STATE__=${apolloState}`
+              __html: `window.__APOLLO_STATE__=${apolloState}`,
             }}
           />
         </Head>
@@ -52,8 +43,8 @@ class MyDocument extends Document {
           <NextScript />
         </body>
       </Html>
-    );
+    )
   }
 }
 
-export default MyDocument;
+export default MyDocument

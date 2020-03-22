@@ -7,7 +7,16 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "generate": "graphql-codegen --config codegen.yml"
+    "generate": "graphql-codegen --config codegen.yml",
+    "format": "prettier \"src/**/*\" --write"
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "semi": false,
+    "singleQuote": true,
+    "printWidth": 100,
+    "arrowParens": "always"
   },
   "dependencies": {
     "@apollo/client": "^3.0.0-beta.41",
@@ -17,6 +26,7 @@
     "graphql": "^14.6.0",
     "isomorphic-unfetch": "^3.0.0",
     "next": "^9.3.1",
+    "prettier": "^2.0.1",
     "react": "^16.13.0",
     "react-cookie": "^4.0.3",
     "react-dom": "^16.13.0",
