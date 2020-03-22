@@ -1,12 +1,24 @@
-import { ApolloClient, createHttpLink, InMemoryCache, ApolloLink } from '@apollo/client'
+import {
+  ApolloClient,
+  ApolloLink,
+  createHttpLink,
+  InMemoryCache,
+  NormalizedCacheObject,
+} from '@apollo/client'
 import fetch from 'isomorphic-unfetch'
 import { Cookies } from 'react-cookie'
+
+declare global {
+  interface Window {
+    __APOLLO_STATE__: NormalizedCacheObject
+  }
+}
 
 const authLink = new ApolloLink((operation, forward) => {
   const cookies = new Cookies()
   const token = cookies.get('token')
 
-  const headers: any = { ...operation.getContext()?.headers }
+  const headers: { Authorization?: string } = {}
 
   if (token) {
     headers.Authorization = `Bearer ${token}`
@@ -25,7 +37,7 @@ const httpLink = createHttpLink({
 export const client = new ApolloClient({
   link: authLink.concat(httpLink),
   cache: new InMemoryCache().restore(
-    typeof window !== 'undefined' ? (window as any).__APOLLO_STATE__ : undefined
+    typeof window !== 'undefined' ? window.__APOLLO_STATE__ : undefined
   ),
   ssrMode: typeof window === 'undefined',
 })

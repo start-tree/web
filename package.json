@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "generate": "graphql-codegen --config codegen.yml",
-    "format": "prettier \"src/**/*\" --write"
+    "format": "prettier \"src/**/*\" --write",
+    "lint": "eslint src/**/* --ext .ts"
   },
   "prettier": {
     "trailingComma": "es5",
@@ -17,6 +18,34 @@
     "singleQuote": true,
     "printWidth": 100,
     "arrowParens": "always"
+  },
+  "eslintConfig": {
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
+    "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "plugin:@typescript-eslint/eslint-recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "env": {
+      "node": true,
+      "es2020": true,
+      "jest": true
+    },
+    "rules": {
+      "@typescript-eslint/explicit-function-return-type": 0,
+      "@typescript-eslint/member-delimiter-style": 0,
+      "@typescript-eslint/no-non-null-assertion": 0
+    }
   },
   "dependencies": {
     "@apollo/client": "^3.0.0-beta.41",
@@ -41,6 +70,10 @@
     "@types/node": "^13.9.2",
     "@types/react": "^16.9.23",
     "@types/react-dom": "^16.9.5",
+    "@typescript-eslint/eslint-plugin": "^2.24.0",
+    "@typescript-eslint/parser": "^2.24.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-react": "^7.19.0",
     "typescript": "^3.8.3"
   }
 }
