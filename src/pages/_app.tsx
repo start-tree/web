@@ -6,8 +6,8 @@ import App, { AppContext, AppProps } from 'next/app'
 import Link from 'next/link'
 import React, { useEffect } from 'react'
 import { CookiesProvider, useCookies } from 'react-cookie'
-import { client } from '../apollo'
-import { useMeQuery } from '../apollo/generated'
+import { client } from '../app'
+import { useMeQuery } from '../app/gql/generated'
 
 const useStyles = makeStyles((theme) => ({
   root: {

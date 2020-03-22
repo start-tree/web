@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import React from 'react'
-import { useProjectsQuery } from '../apollo/generated'
+import { useProjectsQuery } from '../app/gql/generated'
 
 const Index = () => {
   const { data, loading } = useProjectsQuery()

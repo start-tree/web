@@ -1,15 +1,15 @@
 overwrite: true
-schema: "http://localhost:3100/graphql"
-documents: "src/**/*.gql"
+schema: ../team-organizer.core/src/app/schema.gql
+documents: 'src/**/*.gql.ts'
 generates:
-  src/apollo/generated.tsx:
+  src/app/gql/generated.tsx:
     config:
       withHooks: true
       withComponent: false
       withHOC: false
       reactApolloVersion: 3
     plugins:
-      - "typescript"
-      - "typescript-operations"
-      - "typescript-react-apollo"
-      - "fragment-matcher"
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-apollo'
+      - 'fragment-matcher'

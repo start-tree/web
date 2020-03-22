@@ -1,7 +1,7 @@
 import { ServerStyleSheets } from '@material-ui/core'
 import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/document'
 import React from 'react'
-import { client } from '../apollo'
+import { client } from '../app'
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {

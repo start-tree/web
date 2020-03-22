@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { useCookies } from 'react-cookie'
 import { useForm } from 'react-hook-form'
-import { RegisterInput, useRegisterMutation } from '../apollo/generated'
+import { RegisterInput, useRegisterMutation } from '../app/gql/generated'
 
 const useStyles = makeStyles((theme) => ({
   submitButton: {
