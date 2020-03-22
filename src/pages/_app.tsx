@@ -1,71 +1,11 @@
-import { ApolloProvider, useApolloClient } from '@apollo/client'
+import { ApolloProvider } from '@apollo/client'
 import { getDataFromTree } from '@apollo/react-ssr'
-import { Container, Link, makeStyles, Typography } from '@material-ui/core'
-import App, { AppContext, AppProps, AppInitialProps } from 'next/app'
-import NextLink from 'next/link'
+import App, { AppContext, AppInitialProps, AppProps } from 'next/app'
 import React, { useEffect } from 'react'
-import { CookiesProvider, useCookies, Cookies } from 'react-cookie'
+import { Cookies, CookiesProvider } from 'react-cookie'
 import { client } from '../app'
-import { useMeQuery, MeDocument } from '../app/gql/generated'
-import { useRouter } from 'next/router'
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-  },
-  navLink: {
-    marginRight: theme.spacing(2),
-    cursor: 'pointer',
-  },
-}))
-
-const AppLayout = ({ children }: { children: React.ReactNode }) => {
-  const [{ token }, , removeCookie] = useCookies(['token'])
-  const { data } = useMeQuery({ skip: !token })
-  const classes = useStyles()
-
-  const router = useRouter()
-  const client = useApolloClient()
-  const logout = () => {
-    removeCookie('token')
-    client.resetStore()
-    router.push('/')
-  }
-
-  return (
-    <Container>
-      <Typography variant="h6" className={classes.title}>
-        <NextLink as="/" href="/">
-          <Link className={classes.navLink}>Home</Link>
-        </NextLink>
-        {data && data.me ? (
-          <>
-            <Link onClick={() => logout()} className={classes.navLink}>
-              Logout
-            </Link>
-            <Link className={classes.navLink}>{data.me.name}</Link>
-          </>
-        ) : (
-          <>
-            <NextLink as="/login" href="/login">
-              <Link className={classes.navLink}>Login</Link>
-            </NextLink>
-            <NextLink as="/register" href="/register">
-              <Link className={classes.navLink}>Registration</Link>
-            </NextLink>
-          </>
-        )}
-      </Typography>
-      {children}
-    </Container>
-  )
-}
+import { MeDocument } from '../app/gql/generated'
+import { AppLayout } from '../app/elements/layouts'
 
 type InitAppProps = {
   rawCookiesFromServer?: string
