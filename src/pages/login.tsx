@@ -1,4 +1,13 @@
-import { Button, FormControl, makeStyles, TextField } from '@material-ui/core'
+import {
+  Button,
+  Container,
+  FormControl,
+  Link,
+  makeStyles,
+  TextField,
+  Typography,
+} from '@material-ui/core'
+import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { useCookies } from 'react-cookie'
@@ -7,6 +16,15 @@ import { LoginInput, useLoginMutation } from '../app/gql/generated'
 
 const useStyles = makeStyles((theme) => ({
   submitButton: {
+    marginTop: theme.spacing(4),
+  },
+  header: {
+    marginTop: theme.spacing(4),
+  },
+  link: {
+    cursor: 'pointer',
+  },
+  meta: {
     marginTop: theme.spacing(2),
   },
 }))
@@ -24,7 +42,11 @@ const Login = () => {
   const { register, handleSubmit } = useForm<LoginInput>()
 
   return (
-    <div>
+    <Container maxWidth="sm">
+      <header className={classes.header}>
+        <Typography variant="h3">Login</Typography>
+        <Typography paragraph>Login to have full access.</Typography>
+      </header>
       <form
         autoComplete="off"
         onSubmit={handleSubmit((values) => {
@@ -39,11 +61,17 @@ const Login = () => {
         </FormControl>
         <FormControl className={classes.submitButton}>
           <Button type="submit" variant="contained" color="primary">
-            Register
+            Login
           </Button>
         </FormControl>
       </form>
-    </div>
+      <Typography className={classes.meta} align="center">
+        Dont have account?{' '}
+        <NextLink as="/register" href="/register">
+          <Link className={classes.link}>Register</Link>
+        </NextLink>
+      </Typography>
+    </Container>
   )
 }
 
