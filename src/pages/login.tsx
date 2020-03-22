@@ -15,17 +15,23 @@ import { useForm } from 'react-hook-form'
 import { LoginInput, useLoginMutation } from '../app/gql/generated'
 
 const useStyles = makeStyles((theme) => ({
-  submitButton: {
-    marginTop: theme.spacing(4),
+  container: {
+    marginTop: theme.spacing(12),
   },
   header: {
-    marginTop: theme.spacing(4),
+    marginBottom: theme.spacing(3),
+  },
+  title: {
+    marginBottom: theme.spacing(1),
   },
   link: {
     cursor: 'pointer',
   },
+  submitButton: {
+    marginTop: theme.spacing(4),
+  },
   meta: {
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(4),
   },
 }))
 
@@ -42,10 +48,12 @@ const Login = () => {
   const { register, handleSubmit } = useForm<LoginInput>()
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm" className={classes.container}>
       <header className={classes.header}>
-        <Typography variant="h3">Login</Typography>
-        <Typography paragraph>Login to have full access.</Typography>
+        <Typography variant="h3" className={classes.title}>
+          Login
+        </Typography>
+        <Typography>Login to have full access.</Typography>
       </header>
       <form
         autoComplete="off"

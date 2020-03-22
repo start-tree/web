@@ -15,17 +15,23 @@ import { useForm } from 'react-hook-form'
 import { RegisterInput, useRegisterMutation } from '../app/gql/generated'
 
 const useStyles = makeStyles((theme) => ({
-  submitButton: {
-    marginTop: theme.spacing(4),
+  container: {
+    marginTop: theme.spacing(12),
   },
   header: {
-    marginTop: theme.spacing(4),
+    marginBottom: theme.spacing(3),
+  },
+  title: {
+    marginBottom: theme.spacing(1),
   },
   link: {
     cursor: 'pointer',
   },
+  submitButton: {
+    marginTop: theme.spacing(4),
+  },
   meta: {
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(4),
   },
 }))
 
@@ -42,9 +48,11 @@ const Register = () => {
   const { register, handleSubmit } = useForm<RegisterInput>()
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm" className={classes.container}>
       <header className={classes.header}>
-        <Typography variant="h3">Registration</Typography>
+        <Typography variant="h3" className={classes.title}>
+          Registration
+        </Typography>
         <Typography paragraph>Give us some info about you.</Typography>
       </header>
       <form
@@ -64,8 +72,8 @@ const Register = () => {
         <FormControl fullWidth>
           <TextField type="password" name="password" label="Password" inputRef={register} />
         </FormControl>
-        <FormControl className={classes.submitButton} fullWidth>
-          <Typography align="center">
+        <FormControl className={classes.submitButton}>
+          <Typography>
             <Button type="submit" variant="contained" color="primary">
               Create accout
             </Button>
