@@ -15,9 +15,11 @@ const MyApp = ({ Component, pageProps, rawCookiesFromServer }: AppProps & InitAp
   useEffect(() => {
     const jssStyles = document.querySelector('#jss-server-side')
     const apolloState = document.querySelector('#apollo-state')
+
     if (jssStyles) {
       jssStyles.parentElement.removeChild(jssStyles)
     }
+
     if (apolloState) {
       apolloState.parentElement.removeChild(apolloState)
     }
@@ -42,12 +44,10 @@ MyApp.getInitialProps = async (appContext: AppContext): Promise<AppInitialProps 
   if (!process.browser) {
     rawCookiesFromServer = appContext.ctx.req.headers['cookie']
 
-    if (rawCookiesFromServer) {
-      const token = new Cookies(rawCookiesFromServer).get('token')
+    const token = new Cookies(rawCookiesFromServer).get('token')
 
-      if (token) {
-        await client.query({ query: MeDocument, context: { token } })
-      }
+    if (token) {
+      await client.query({ query: MeDocument, context: { token } })
     }
 
     await getDataFromTree(<appContext.AppTree {...appProps} />)
