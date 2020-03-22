@@ -1,12 +1,12 @@
 import { ApolloProvider, useApolloClient } from '@apollo/client'
 import { getDataFromTree } from '@apollo/react-ssr'
 import { Container, Link, makeStyles, Typography } from '@material-ui/core'
-import App, { AppContext, AppProps } from 'next/app'
+import App, { AppContext, AppProps, AppInitialProps } from 'next/app'
 import NextLink from 'next/link'
 import React, { useEffect } from 'react'
-import { CookiesProvider, useCookies } from 'react-cookie'
+import { CookiesProvider, useCookies, Cookies } from 'react-cookie'
 import { client } from '../app'
-import { useMeQuery } from '../app/gql/generated'
+import { useMeQuery, MeDocument } from '../app/gql/generated'
 import { useRouter } from 'next/router'
 
 const useStyles = makeStyles((theme) => ({
@@ -27,9 +27,7 @@ const useStyles = makeStyles((theme) => ({
 
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
   const [{ token }, , removeCookie] = useCookies(['token'])
-  const { data } = useMeQuery({
-    skip: !token,
-  })
+  const { data } = useMeQuery({ skip: !token })
   const classes = useStyles()
 
   const router = useRouter()
@@ -69,7 +67,11 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
   )
 }
 
-const MyApp = ({ Component, pageProps }: AppProps) => {
+type InitAppProps = {
+  rawCookiesFromServer?: string
+}
+
+const MyApp = ({ Component, pageProps, rawCookiesFromServer }: AppProps & InitAppProps) => {
   useEffect(() => {
     const jssStyles = document.querySelector('#jss-server-side')
     const apolloState = document.querySelector('#apollo-state')
@@ -82,7 +84,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   }, [])
 
   return (
-    <CookiesProvider>
+    <CookiesProvider cookies={new Cookies(rawCookiesFromServer)}>
       <ApolloProvider client={client}>
         <AppLayout>
           <Component {...pageProps} />
@@ -92,14 +94,26 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   )
 }
 
-MyApp.getInitialProps = async (appContext: AppContext) => {
+MyApp.getInitialProps = async (appContext: AppContext): Promise<AppInitialProps & InitAppProps> => {
   const appProps = await App.getInitialProps(appContext)
 
+  let rawCookiesFromServer: string | undefined
+
   if (!process.browser) {
+    rawCookiesFromServer = appContext.ctx.req.headers['cookie']
+
+    if (rawCookiesFromServer) {
+      const token = new Cookies(rawCookiesFromServer).get('token')
+
+      if (token) {
+        await client.query({ query: MeDocument, context: { token } })
+      }
+    }
+
     await getDataFromTree(<appContext.AppTree {...appProps} />)
   }
 
-  return { ...appProps }
+  return { ...appProps, rawCookiesFromServer }
 }
 
 export default MyApp

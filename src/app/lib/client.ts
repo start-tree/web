@@ -20,6 +20,12 @@ const authLink = new ApolloLink((operation, forward) => {
 
   const headers: { Authorization?: string } = {}
 
+  const context = operation.getContext()
+
+  if (context.token) {
+    headers.Authorization = `Bearer ${context.token}`
+  }
+
   if (token) {
     headers.Authorization = `Bearer ${token}`
   }
