@@ -1,4 +1,12 @@
-import { Card, CardContent, Link, makeStyles, Typography } from '@material-ui/core'
+import {
+  Card,
+  CardContent,
+  Link,
+  makeStyles,
+  Typography,
+  Button,
+  CardActions,
+} from '@material-ui/core'
 import NextLink from 'next/link'
 import React from 'react'
 import { useDeleteProjectMutation, useMeQuery, useProjectsQuery } from '../../../app'
@@ -11,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
   link: {
     cursor: 'pointer',
+    textDecoration: 'none !important',
   },
 }))
 
@@ -41,10 +50,20 @@ const UserProjects = () => {
                 </NextLink>
               </Typography>
               <Typography>{p.description}</Typography>
-              <span onClick={() => deleteMutation({ variables: { id: Number(p.id) } })}>
-                delete
-              </span>
             </CardContent>
+            <CardActions>
+              <Button
+                onClick={() => deleteMutation({ variables: { id: Number(p.id) } })}
+                color="secondary"
+              >
+                Delete
+              </Button>
+              <NextLink as={`/user/projects/${p.id}/update`} href={`/user/projects/[id]/update`}>
+                <Button color="primary">
+                  <Link className={classes.link}>Update</Link>
+                </Button>
+              </NextLink>
+            </CardActions>
           </Card>
         ))}
     </UserProjectsLayout>

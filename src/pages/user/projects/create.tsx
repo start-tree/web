@@ -1,19 +1,34 @@
 import React from 'react'
-import { CreateProjectInput, useCreateProjectMutation } from '../../../app'
+import {
+  CreateProjectInput,
+  useCreateProjectMutation,
+  ProjectsDocument,
+  useMeQuery,
+  ProjectsQueryVariables,
+} from '../../../app'
 import { ProjectForm } from '../../../projects'
-import { UserProjectsLayout } from '../../../users'
+import { UserLayout } from '../../../users'
 
 const Create = () => {
+  const { data } = useMeQuery()
   const [createProjectMutation] = useCreateProjectMutation()
 
   return (
-    <UserProjectsLayout>
+    <UserLayout>
       <ProjectForm
         onSubmit={(values: CreateProjectInput) =>
-          createProjectMutation({ variables: { input: values } })
+          createProjectMutation({
+            variables: { input: values },
+            refetchQueries: [
+              {
+                query: ProjectsDocument,
+                variables: { ownerId: data && Number(data.me.id) } as ProjectsQueryVariables,
+              },
+            ],
+          })
         }
       />
-    </UserProjectsLayout>
+    </UserLayout>
   )
 }
 

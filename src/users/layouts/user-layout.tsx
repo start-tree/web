@@ -1,4 +1,4 @@
-import { Box, Container, Link, makeStyles, Typography } from '@material-ui/core'
+import { Box, Button, Container, Link, makeStyles, Typography } from '@material-ui/core'
 import React from 'react'
 import { NextLink, useMeQuery } from '../../app'
 
@@ -10,8 +10,8 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(3),
   },
   link: {
-    marginRight: theme.spacing(3),
     cursor: 'pointer',
+    textDecoration: 'none !important',
   },
   content: {
     marginTop: theme.spacing(4),
@@ -33,10 +33,14 @@ export const UserLayout = ({ children }: Props) => {
       </Box>
       <Box component="header">
         <NextLink as="/user" href="/user">
-          <Link className={classes.link}>Home</Link>
+          <Button>
+            <Link className={classes.link}>Home</Link>
+          </Button>
         </NextLink>
         <NextLink as="/user/projects" href="/user/projects">
-          <Link className={classes.link}>Projects</Link>
+          <Button>
+            <Link className={classes.link}>Projects</Link>
+          </Button>
         </NextLink>
       </Box>
       <Box className={classes.content}>{children}</Box>

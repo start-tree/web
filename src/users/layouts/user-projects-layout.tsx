@@ -1,11 +1,18 @@
-import { Box, Link, makeStyles, Typography } from '@material-ui/core'
+import { Box, Link, makeStyles, Typography, Button } from '@material-ui/core'
 import React, { ReactNode } from 'react'
 import { NextLink } from '../../app'
 import { UserLayout } from './user-layout'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
+  title: {
+    marginBottom: theme.spacing(2),
+  },
   link: {
     cursor: 'pointer',
+    textDecoration: 'none !important',
+  },
+  header: {
+    marginBottom: theme.spacing(3),
   },
 }))
 
@@ -18,10 +25,14 @@ export const UserProjectsLayout = ({ children }: Props) => {
 
   return (
     <UserLayout>
-      <Typography variant="h6">Projects</Typography>
-      <Box component="header">
+      <Typography variant="h6" className={classes.title}>
+        Projects
+      </Typography>
+      <Box component="header" className={classes.header}>
         <NextLink as="/user/projects/create" href="/user/projects/create">
-          <Link className={classes.link}>Create</Link>
+          <Button variant="outlined" color="primary">
+            <Link className={classes.link}>Create project</Link>
+          </Button>
         </NextLink>
       </Box>
       {children}

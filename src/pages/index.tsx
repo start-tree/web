@@ -29,7 +29,7 @@ const Index = () => {
   return (
     <Container maxWidth="md" className={classes.container}>
       <Typography variant="h3" className={classes.title}>
-        Teams
+        Projects
       </Typography>
       {data &&
         data.projects.map((p) => (
