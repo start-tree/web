@@ -1,9 +1,9 @@
 import { Card, CardContent, Link, makeStyles, Typography } from '@material-ui/core'
 import NextLink from 'next/link'
 import React from 'react'
-import { useDeleteProjectMutation, useMeQuery, useProjectsQuery } from '../../../app/gql/generated'
+import { useDeleteProjectMutation, useMeQuery, useProjectsQuery } from '../../../app'
+import { projectsQuery } from '../../../projects'
 import { UserProjectsLayout } from '../../../users'
-import { projectsQuery } from '../../../projects/gql/projects.gql'
 
 const useStyles = makeStyles((theme) => ({
   card: {

@@ -12,7 +12,7 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { useCookies } from 'react-cookie'
 import { useForm } from 'react-hook-form'
-import { LoginInput, useLoginMutation } from '../app/gql/generated'
+import { LoginInput, useLoginMutation } from '../app'
 
 const useStyles = makeStyles((theme) => ({
   container: {

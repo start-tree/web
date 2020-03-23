@@ -1,7 +1,7 @@
 import { Box, Container, Link, makeStyles, Typography } from '@material-ui/core'
 import NextLink from 'next/link'
 import React from 'react'
-import { useMeQuery } from '../../app/gql/generated'
+import { useMeQuery } from '../../app'
 
 const useStyles = makeStyles((theme) => ({
   container: {

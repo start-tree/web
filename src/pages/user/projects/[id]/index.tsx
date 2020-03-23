@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import React from 'react'
-import { useProjectQuery } from '../../../../app/gql/generated'
+import { useProjectQuery } from '../../../../app'
 import { UserProjectsLayout } from '../../../../users'
 
 const UserProject = () => {

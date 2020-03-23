@@ -1,6 +1,6 @@
 import React from 'react'
-import { CreateProjectInput, useCreateProjectMutation } from '../../../app/gql/generated'
-import { ProjectForm } from '../../../projects/components/project-form'
+import { CreateProjectInput, useCreateProjectMutation } from '../../../app'
+import { ProjectForm } from '../../../projects'
 import { UserProjectsLayout } from '../../../users'
 
 const Create = () => {

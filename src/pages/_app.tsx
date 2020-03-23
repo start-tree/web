@@ -3,8 +3,7 @@ import { getDataFromTree } from '@apollo/react-ssr'
 import App, { AppContext, AppInitialProps, AppProps } from 'next/app'
 import React, { useEffect } from 'react'
 import { Cookies, CookiesProvider } from 'react-cookie'
-import { client, AppLayout } from '../app'
-import { MeDocument } from '../app/gql/generated'
+import { client, AppLayout, MeDocument } from '../app'
 
 type InitAppProps = {
   rawCookiesFromServer?: string

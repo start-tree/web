@@ -1,0 +1,5 @@
+export * from './create-project.gql'
+export * from './delete-project.gql'
+export * from './project.gql'
+export * from './projects.gql'
+export * from './update-project.gql'

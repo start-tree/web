@@ -1,12 +1,7 @@
-import { omit } from 'lodash'
 import { useRouter } from 'next/router'
 import React from 'react'
-import {
-  UpdateProjectInput,
-  useProjectQuery,
-  useUpdateProjectMutation,
-} from '../../../../app/gql/generated'
-import { ProjectForm } from '../../../../projects/components/project-form'
+import { UpdateProjectInput, useProjectQuery, useUpdateProjectMutation } from '../../../../app'
+import { ProjectForm } from '../../../../projects'
 import { UserProjectsLayout } from '../../../../users'
 
 const Update = () => {
