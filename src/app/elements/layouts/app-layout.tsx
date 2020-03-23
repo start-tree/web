@@ -46,7 +46,9 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
             <Link onClick={() => logout()} className={classes.navLink}>
               Logout
             </Link>
-            <Link className={classes.navLink}>{data.me.name}</Link>
+            <NextLink as="/user" href="/user">
+              <Link className={classes.navLink}>{data.me.name}</Link>
+            </NextLink>
           </>
         ) : (
           <>

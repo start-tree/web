@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client'
 
 export const projectsQuery = gql`
-  query Projects {
-    projects {
+  query Projects($ownerId: Int) {
+    projects(ownerId: $ownerId) {
       id
       title
       description
