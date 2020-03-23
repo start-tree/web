@@ -4,7 +4,7 @@ import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { useCookies } from 'react-cookie'
-import { useMeQuery } from '../../gql/generated'
+import { useMeQuery } from '../gql/generated'
 
 const useStyles = makeStyles((theme) => ({
   root: {

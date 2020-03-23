@@ -1,14 +1,13 @@
-import { Typography } from '@material-ui/core'
-import React from 'react'
 import { omit } from 'lodash'
-import { ProjectForm } from '../../../../projects/components/project-form'
-import UserLayout from '../../../../user/layouts/user-layout'
+import { useRouter } from 'next/router'
+import React from 'react'
 import {
   UpdateProjectInput,
-  useUpdateProjectMutation,
   useProjectQuery,
+  useUpdateProjectMutation,
 } from '../../../../app/gql/generated'
-import { useRouter } from 'next/router'
+import { ProjectForm } from '../../../../projects/components/project-form'
+import { UserProjectsLayout } from '../../../../users'
 
 const Update = () => {
   const router = useRouter()
@@ -20,20 +19,14 @@ const Update = () => {
   }
 
   return (
-    <UserLayout>
-      <Typography variant="h6">Projects</Typography>
+    <UserProjectsLayout>
       <ProjectForm
-        initialValues={
-          {
-            ...omit(data.project, ['__typename', 'ownerId', 'owner']),
-            vacantions: data.project.vacantions.map((v) => omit(v, ['__typename'])),
-          } as any
-        }
+        initialValues={data.project}
         onSubmit={(values: UpdateProjectInput) =>
           updateProjectMutation({ variables: { input: values } })
         }
       />
-    </UserLayout>
+    </UserProjectsLayout>
   )
 }
 

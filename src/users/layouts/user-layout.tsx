@@ -23,7 +23,7 @@ type Props = {
   children?: React.ReactNode
 }
 
-const UserLayout = ({ children }: Props) => {
+export const UserLayout = ({ children }: Props) => {
   const { data } = useMeQuery()
   const classes = useStyles()
 
@@ -44,5 +44,3 @@ const UserLayout = ({ children }: Props) => {
     </Container>
   )
 }
-
-export default UserLayout

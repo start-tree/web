@@ -1,11 +1,11 @@
 import { Box, Button, FormControl, TextField, Typography } from '@material-ui/core'
 import React from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
-import { Project, Vacantion } from '../../app/gql/generated'
+import { ProjectQuery } from '../../app/gql/generated'
 
 type Props = {
   onSubmit: (data: object) => Promise<any>
-  initialValues?: Omit<Project, '__typename'> & { vacantions: Omit<Vacantion, '__typename'>[] }
+  initialValues?: ProjectQuery['project']
 }
 
 export const ProjectForm = ({ onSubmit, initialValues }: Props) => {
@@ -19,7 +19,9 @@ export const ProjectForm = ({ onSubmit, initialValues }: Props) => {
   return (
     <Box>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <TextField name="id" inputRef={register} style={{ display: 'none' }} />
+        {initialValues?.id && (
+          <TextField name="id" inputRef={register} style={{ display: 'none' }} />
+        )}
         <FormControl fullWidth>
           <TextField name="title" label="Title" inputRef={register} />
         </FormControl>
@@ -34,11 +36,13 @@ export const ProjectForm = ({ onSubmit, initialValues }: Props) => {
         </FormControl>
         {fields.map((item, i) => (
           <div key={item._id}>
-            <TextField
-              name={`vacantions[${i}].id`}
-              inputRef={register}
-              style={{ display: 'none' }}
-            />
+            {item.id && (
+              <TextField
+                name={`vacantions[${i}].id`}
+                inputRef={register}
+                style={{ display: 'none' }}
+              />
+            )}
             <FormControl fullWidth>
               <TextField name={`vacantions[${i}].title`} label="Title" inputRef={register} />
             </FormControl>

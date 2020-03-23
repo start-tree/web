@@ -1,8 +1,9 @@
-import { Card, CardContent, Link, makeStyles, Typography, Box } from '@material-ui/core'
+import { Card, CardContent, Link, makeStyles, Typography } from '@material-ui/core'
 import NextLink from 'next/link'
 import React from 'react'
-import { useMeQuery, useProjectsQuery, useDeleteProjectMutation } from '../../../app/gql/generated'
-import UserLayout from '../../../user/layouts/user-layout'
+import { useDeleteProjectMutation, useMeQuery, useProjectsQuery } from '../../../app/gql/generated'
+import { UserProjectsLayout } from '../../../users'
+import { projectsQuery } from '../../../projects/gql/projects.gql'
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -22,16 +23,14 @@ const UserProjects = () => {
   })
   const classes = useStyles()
 
-  const [deleteProjectMutation] = useDeleteProjectMutation()
+  const [deleteMutation] = useDeleteProjectMutation({
+    refetchQueries: [
+      { query: projectsQuery, variables: { ownerId: meData && Number(meData.me.id) } },
+    ],
+  })
 
   return (
-    <UserLayout>
-      <Typography variant="h6">Projects</Typography>
-      <Box component="header">
-        <NextLink as="/user/projects/create" href="/user/projects/create">
-          <Link className={classes.link}>Create</Link>
-        </NextLink>
-      </Box>
+    <UserProjectsLayout>
       {projectsData &&
         projectsData.projects.map((p) => (
           <Card key={p.id} className={classes.card}>
@@ -42,13 +41,13 @@ const UserProjects = () => {
                 </NextLink>
               </Typography>
               <Typography>{p.description}</Typography>
-              <span onClick={() => deleteProjectMutation({ variables: { id: Number(p.id) } })}>
+              <span onClick={() => deleteMutation({ variables: { id: Number(p.id) } })}>
                 delete
               </span>
             </CardContent>
           </Card>
         ))}
-    </UserLayout>
+    </UserProjectsLayout>
   )
 }
 

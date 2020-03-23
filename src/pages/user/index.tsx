@@ -1,5 +1,5 @@
 import React from 'react'
-import UserLayout from '../../user/layouts/user-layout'
+import { UserLayout } from '../../users'
 
 const User = () => {
   return <UserLayout />
