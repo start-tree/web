@@ -1,4 +1,4 @@
-import { Card, CardContent, Link, makeStyles, Typography } from '@material-ui/core'
+import { Card, CardContent, Link, makeStyles, Typography, Box } from '@material-ui/core'
 import NextLink from 'next/link'
 import React from 'react'
 import { useMeQuery, useProjectsQuery } from '../../../app/gql/generated'
@@ -25,6 +25,11 @@ const UserProjects = () => {
   return (
     <UserLayout>
       <Typography variant="h6">Projects</Typography>
+      <Box component="header">
+        <NextLink as="/user/projects/create" href="/user/projects/create">
+          <Link className={classes.link}>Create</Link>
+        </NextLink>
+      </Box>
       {projectsData &&
         projectsData.projects.map((p) => (
           <Card key={p.id} className={classes.card}>
