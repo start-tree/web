@@ -1,6 +1,6 @@
 import { Box, Link, makeStyles, Typography } from '@material-ui/core'
-import NextLink from 'next/link'
 import React, { ReactNode } from 'react'
+import { NextLink } from '../../app'
 import { UserLayout } from './user-layout'
 
 const useStyles = makeStyles(() => ({

@@ -1,9 +1,9 @@
 import { useApolloClient } from '@apollo/client'
 import { Container, Link, makeStyles, Typography } from '@material-ui/core'
-import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { useCookies } from 'react-cookie'
+import { NextLink } from '../components/next-link'
 import { useMeQuery } from '../gql/generated'
 
 const useStyles = makeStyles((theme) => ({
