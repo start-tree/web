@@ -1,7 +1,7 @@
 import { Card, CardContent, Link, makeStyles, Typography, Box } from '@material-ui/core'
 import NextLink from 'next/link'
 import React from 'react'
-import { useMeQuery, useProjectsQuery } from '../../../app/gql/generated'
+import { useMeQuery, useProjectsQuery, useDeleteProjectMutation } from '../../../app/gql/generated'
 import UserLayout from '../../../user/layouts/user-layout'
 
 const useStyles = makeStyles((theme) => ({
@@ -22,6 +22,8 @@ const UserProjects = () => {
   })
   const classes = useStyles()
 
+  const [deleteProjectMutation] = useDeleteProjectMutation()
+
   return (
     <UserLayout>
       <Typography variant="h6">Projects</Typography>
@@ -35,11 +37,14 @@ const UserProjects = () => {
           <Card key={p.id} className={classes.card}>
             <CardContent>
               <Typography variant="h6">
-                <NextLink as={`/projects/${p.id}`} href={`/projects/[id]`}>
+                <NextLink as={`/user/projects/${p.id}`} href={`/user/projects/[id]`}>
                   <Link className={classes.link}>{p.title}</Link>
                 </NextLink>
               </Typography>
               <Typography>{p.description}</Typography>
+              <span onClick={() => deleteProjectMutation({ variables: { id: Number(p.id) } })}>
+                delete
+              </span>
             </CardContent>
           </Card>
         ))}
