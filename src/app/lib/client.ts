@@ -15,18 +15,13 @@ declare global {
 }
 
 const authLink = new ApolloLink((operation, forward) => {
-  const cookies = new Cookies()
-  const token = cookies.get('token')
-
   const headers: { Authorization?: string } = {}
 
+  const cookies = new Cookies()
   const context = operation.getContext()
+  const token = context.token ?? cookies.get('token')
 
-  if (context.token) {
-    headers.Authorization = `Bearer ${context.token}`
-  }
-
-  if (token) {
+  if (token.token) {
     headers.Authorization = `Bearer ${token}`
   }
 
