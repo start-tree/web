@@ -21,7 +21,7 @@ const authLink = new ApolloLink((operation, forward) => {
   const context = operation.getContext()
   const token = context.token ?? cookies.get('token')
 
-  if (token.token) {
+  if (token) {
     headers.Authorization = `Bearer ${token}`
   }
 

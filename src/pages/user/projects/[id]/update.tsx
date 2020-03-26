@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import React from 'react'
 import {
-  ProjectDocument,
+  ProjectsDocument,
   ProjectsQueryVariables,
   UpdateProjectInput,
   useMeQuery,
@@ -30,7 +30,7 @@ const Update = () => {
             variables: { input: values },
             refetchQueries: [
               {
-                query: ProjectDocument,
+                query: ProjectsDocument,
                 variables: { ownerId: meData && Number(meData.me.id) } as ProjectsQueryVariables,
               },
             ],

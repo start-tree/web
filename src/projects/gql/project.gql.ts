@@ -18,6 +18,10 @@ export const projectQuery = gql`
         description
         projectId
       }
+      categories {
+        id
+        name
+      }
     }
   }
 `

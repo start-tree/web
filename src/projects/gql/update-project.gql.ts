@@ -18,6 +18,10 @@ export const updateProjectMutation = gql`
         description
         projectId
       }
+      categories {
+        id
+        name
+      }
     }
   }
 `

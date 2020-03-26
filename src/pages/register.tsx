@@ -58,8 +58,6 @@ const Register = () => {
       <form
         autoComplete="off"
         onSubmit={handleSubmit((values) => {
-          console.log(values)
-
           registerMutations({ variables: { input: values } })
         })}
       >
