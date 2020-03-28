@@ -9,9 +9,10 @@ import {
   MenuItem,
 } from '@material-ui/core'
 import { useRouter } from 'next/router'
-import React, { useEffect } from 'react'
-import { useFieldArray, useForm, Controller } from 'react-hook-form'
-import { ProjectQuery, useCategoriesQuery } from '../../app'
+import React from 'react'
+import { useFieldArray, useForm, Controller, DeepPartial } from 'react-hook-form'
+import { useCategoriesQuery, ProjectInput } from '../../app'
+import { omit } from 'lodash'
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -34,23 +35,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+export class ProjectFormData {
+  title: string
+  description: string
+  categoriesIds: string[]
+  vacantions?: { id?: string; title: string; description: string }[]
+}
+
 type Props = {
-  onSubmit: (data: object) => Promise<any>
-  initialValues?: ProjectQuery['project']
+  onSubmit: (data: ProjectInput) => Promise<any>
+  initialValues?: DeepPartial<ProjectFormData>
   submitLabel?: string
 }
 
 export const ProjectForm = ({ onSubmit, initialValues, submitLabel }: Props) => {
   const router = useRouter()
 
-  const { register, control, handleSubmit, setValue } = useForm({
-    defaultValues: {
-      ...initialValues,
-      categoriesIds: initialValues?.categories
-        ? initialValues.categories.map((c) => String(c.id))
-        : [],
-    },
-  })
+  const { register, control, handleSubmit, getValues } = useForm({ defaultValues: initialValues })
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'vacantions',
@@ -61,18 +62,6 @@ export const ProjectForm = ({ onSubmit, initialValues, submitLabel }: Props) => 
 
   const classes = useStyles()
 
-  useEffect(() => {
-    if (initialValues?.id) {
-      register('id')
-      setValue('id', initialValues.id)
-    }
-
-    if (!initialValues?.vacantions) {
-      register('vacantions')
-      setValue('vacantions', [])
-    }
-  }, [])
-
   return (
     <Box>
       <Typography variant="h5" className={classes.title}>
@@ -80,13 +69,13 @@ export const ProjectForm = ({ onSubmit, initialValues, submitLabel }: Props) => 
       </Typography>
       <form
         onSubmit={handleSubmit(async (values) => {
+          const data = omit(values, ['categoriesIds', 'vacantions'])
           await onSubmit({
-            ...values,
-            id: values.id ? Number(values.id) : undefined,
+            ...data,
             categoriesIds: values.categoriesIds.map((id) => Number(id)),
-            vacantions: values.vacantions.map((v) => ({
-              ...v,
-              id: v.id ? Number(v.id) : undefined,
+            vacantions: values.vacantions?.map((vacantion) => ({
+              ...vacantion,
+              id: vacantion.id ? Number(vacantion.id) : undefined,
             })),
           })
           router.push('/user/projects')
@@ -110,13 +99,12 @@ export const ProjectForm = ({ onSubmit, initialValues, submitLabel }: Props) => 
             <Controller
               name="categoriesIds"
               control={control}
+              defaultValue={getValues().categoriesIds ?? []}
               as={
                 <Select
                   label="Categories"
                   placeholder="Pick categories"
-                  name="categoriesIds"
                   variant="outlined"
-                  inputRef={() => register('categoriesIds')}
                   multiple
                 >
                   {categoriesData?.categories &&

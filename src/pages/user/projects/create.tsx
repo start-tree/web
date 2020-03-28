@@ -1,10 +1,10 @@
 import React from 'react'
 import {
-  CreateProjectInput,
   useCreateProjectMutation,
   ProjectsDocument,
   useMeQuery,
   ProjectsQueryVariables,
+  ProjectInput,
 } from '../../../app'
 import { ProjectForm } from '../../../projects'
 import { UserLayout } from '../../../users'
@@ -16,7 +16,7 @@ const Create = () => {
   return (
     <UserLayout>
       <ProjectForm
-        onSubmit={(values: CreateProjectInput) =>
+        onSubmit={(values: ProjectInput) =>
           createProjectMutation({
             variables: { input: values },
             refetchQueries: [

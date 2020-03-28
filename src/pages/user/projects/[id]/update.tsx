@@ -3,18 +3,32 @@ import React from 'react'
 import {
   ProjectsDocument,
   ProjectsQueryVariables,
-  UpdateProjectInput,
   useMeQuery,
   useProjectQuery,
   useUpdateProjectMutation,
+  ProjectQuery,
 } from '../../../../app'
-import { ProjectForm } from '../../../../projects'
+import { ProjectForm, ProjectFormData } from '../../../../projects'
 import { UserProjectsLayout } from '../../../../users'
+
+const serializeProjectToForm = (data: ProjectQuery['project']): ProjectFormData => {
+  return {
+    title: data.title,
+    description: data.description,
+    categoriesIds: data.categories.map((category) => category.id),
+    vacantions: data.vacantions?.map((vacantion) => ({
+      id: vacantion.id,
+      title: vacantion.title,
+      description: vacantion.description,
+    })),
+  }
+}
 
 const Update = () => {
   const router = useRouter()
+  const id = Number(router.query.id)
   const { data: meData } = useMeQuery()
-  const { data } = useProjectQuery({ variables: { id: Number(router.query.id) } })
+  const { data } = useProjectQuery({ variables: { id } })
   const [updateProjectMutation] = useUpdateProjectMutation()
 
   if (!data) {
@@ -24,10 +38,15 @@ const Update = () => {
   return (
     <UserProjectsLayout>
       <ProjectForm
-        initialValues={data.project}
-        onSubmit={(values: UpdateProjectInput) =>
+        initialValues={serializeProjectToForm(data.project)}
+        onSubmit={async (values) => {
           updateProjectMutation({
-            variables: { input: values },
+            variables: {
+              input: {
+                id,
+                ...values,
+              },
+            },
             refetchQueries: [
               {
                 query: ProjectsDocument,
@@ -35,7 +54,7 @@ const Update = () => {
               },
             ],
           })
-        }
+        }}
         submitLabel="Update"
       />
     </UserProjectsLayout>
