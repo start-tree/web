@@ -11,6 +11,7 @@ import {
 import { useRouter } from 'next/router'
 import React from 'react'
 import { Controller, useFieldArray, useForm } from 'react-hook-form'
+import * as yup from 'yup'
 import { useCategoriesQuery } from '../../app'
 
 const useStyles = makeStyles((theme) => ({
@@ -37,9 +38,25 @@ const useStyles = makeStyles((theme) => ({
 export class ProjectFormData {
   title: string
   description: string
-  categoriesIds: string[]
-  vacantions?: { id?: string; title: string; description: string }[]
+  categoriesIds: number[]
+  vacantions?: { id?: number; title: string; description: string }[]
 }
+
+const projectSchema = yup.object().shape<ProjectFormData>({
+  title: yup.string().required(),
+  description: yup.string().required(),
+  categoriesIds: yup.array().of(yup.number().required()).required(),
+  vacantions: yup
+    .array()
+    .of(
+      yup.object().shape({
+        id: yup.number(),
+        title: yup.string().required(),
+        description: yup.string().required(),
+      })
+    )
+    .default([]),
+})
 
 type Props = {
   onSubmit: (data: ProjectFormData) => Promise<any>
@@ -52,6 +69,7 @@ export const ProjectForm = ({ onSubmit, initialValues, submitLabel }: Props) => 
 
   const { register, control, handleSubmit, getValues } = useForm<ProjectFormData>({
     defaultValues: initialValues,
+    validationSchema: projectSchema,
   })
   const { fields, append, remove } = useFieldArray({
     control,
@@ -92,7 +110,11 @@ export const ProjectForm = ({ onSubmit, initialValues, submitLabel }: Props) => 
             <Controller
               name="categoriesIds"
               control={control}
-              defaultValue={getValues().categoriesIds ?? []}
+              defaultValue={
+                getValues().categoriesIds
+                  ? getValues().categoriesIds.map((id) => id.toString())
+                  : []
+              }
               as={
                 <Select
                   label="Categories"

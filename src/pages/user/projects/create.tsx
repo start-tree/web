@@ -5,7 +5,7 @@ import {
   useCreateProjectMutation,
   useMeQuery,
 } from '../../../app'
-import { deserializeFormDataToProject, ProjectForm } from '../../../projects'
+import { ProjectForm } from '../../../projects'
 import { UserLayout } from '../../../users'
 
 const Create = () => {
@@ -17,7 +17,7 @@ const Create = () => {
       <ProjectForm
         onSubmit={(values) =>
           createProjectMutation({
-            variables: { input: deserializeFormDataToProject(values) },
+            variables: { input: values },
             refetchQueries: [
               {
                 query: ProjectsDocument,

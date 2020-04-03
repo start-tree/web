@@ -7,11 +7,7 @@ import {
   useProjectQuery,
   useUpdateProjectMutation,
 } from '../../../../app'
-import {
-  deserializeFormDataToProject,
-  ProjectForm,
-  serializeProjectToFormData,
-} from '../../../../projects'
+import { ProjectForm, serializeProjectToFormData } from '../../../../projects'
 import { UserProjectsLayout } from '../../../../users'
 
 const Update = () => {
@@ -30,13 +26,11 @@ const Update = () => {
       <ProjectForm
         initialValues={serializeProjectToFormData(data.project)}
         onSubmit={async (values) => {
-          console.log(values)
-
           updateProjectMutation({
             variables: {
               input: {
                 id,
-                ...deserializeFormDataToProject(values),
+                ...values,
               },
             },
             refetchQueries: [
