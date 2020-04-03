@@ -3,16 +3,15 @@ import {
   Button,
   FormControl,
   makeStyles,
+  MenuItem,
+  Select,
   TextField,
   Typography,
-  Select,
-  MenuItem,
 } from '@material-ui/core'
 import { useRouter } from 'next/router'
 import React from 'react'
-import { useFieldArray, useForm, Controller, DeepPartial } from 'react-hook-form'
-import { useCategoriesQuery, ProjectInput } from '../../app'
-import { omit } from 'lodash'
+import { Controller, useFieldArray, useForm } from 'react-hook-form'
+import { useCategoriesQuery } from '../../app'
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -43,15 +42,17 @@ export class ProjectFormData {
 }
 
 type Props = {
-  onSubmit: (data: ProjectInput) => Promise<any>
-  initialValues?: DeepPartial<ProjectFormData>
+  onSubmit: (data: ProjectFormData) => Promise<any>
+  initialValues?: ProjectFormData
   submitLabel?: string
 }
 
 export const ProjectForm = ({ onSubmit, initialValues, submitLabel }: Props) => {
   const router = useRouter()
 
-  const { register, control, handleSubmit, getValues } = useForm({ defaultValues: initialValues })
+  const { register, control, handleSubmit, getValues } = useForm<ProjectFormData>({
+    defaultValues: initialValues,
+  })
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'vacantions',
@@ -69,15 +70,7 @@ export const ProjectForm = ({ onSubmit, initialValues, submitLabel }: Props) => 
       </Typography>
       <form
         onSubmit={handleSubmit(async (values) => {
-          const data = omit(values, ['categoriesIds', 'vacantions'])
-          await onSubmit({
-            ...data,
-            categoriesIds: values.categoriesIds.map((id) => Number(id)),
-            vacantions: values.vacantions?.map((vacantion) => ({
-              ...vacantion,
-              id: vacantion.id ? Number(vacantion.id) : undefined,
-            })),
-          })
+          await onSubmit(values)
           router.push('/user/projects')
         })}
       >
@@ -126,6 +119,7 @@ export const ProjectForm = ({ onSubmit, initialValues, submitLabel }: Props) => 
             <Box key={item._id} className={classes.vacantions}>
               {item.id && (
                 <TextField
+                  type="number"
                   name={`vacantions[${i}].id`}
                   inputRef={register}
                   style={{ display: 'none' }}

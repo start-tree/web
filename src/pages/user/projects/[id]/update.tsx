@@ -6,23 +6,13 @@ import {
   useMeQuery,
   useProjectQuery,
   useUpdateProjectMutation,
-  ProjectQuery,
 } from '../../../../app'
-import { ProjectForm, ProjectFormData } from '../../../../projects'
+import {
+  deserializeFormDataToProject,
+  ProjectForm,
+  serializeProjectToFormData,
+} from '../../../../projects'
 import { UserProjectsLayout } from '../../../../users'
-
-const serializeProjectToForm = (data: ProjectQuery['project']): ProjectFormData => {
-  return {
-    title: data.title,
-    description: data.description,
-    categoriesIds: data.categories.map((category) => category.id),
-    vacantions: data.vacantions?.map((vacantion) => ({
-      id: vacantion.id,
-      title: vacantion.title,
-      description: vacantion.description,
-    })),
-  }
-}
 
 const Update = () => {
   const router = useRouter()
@@ -38,13 +28,15 @@ const Update = () => {
   return (
     <UserProjectsLayout>
       <ProjectForm
-        initialValues={serializeProjectToForm(data.project)}
+        initialValues={serializeProjectToFormData(data.project)}
         onSubmit={async (values) => {
+          console.log(values)
+
           updateProjectMutation({
             variables: {
               input: {
                 id,
-                ...values,
+                ...deserializeFormDataToProject(values),
               },
             },
             refetchQueries: [

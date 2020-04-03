@@ -1,12 +1,11 @@
 import React from 'react'
 import {
-  useCreateProjectMutation,
   ProjectsDocument,
-  useMeQuery,
   ProjectsQueryVariables,
-  ProjectInput,
+  useCreateProjectMutation,
+  useMeQuery,
 } from '../../../app'
-import { ProjectForm } from '../../../projects'
+import { deserializeFormDataToProject, ProjectForm } from '../../../projects'
 import { UserLayout } from '../../../users'
 
 const Create = () => {
@@ -16,9 +15,9 @@ const Create = () => {
   return (
     <UserLayout>
       <ProjectForm
-        onSubmit={(values: ProjectInput) =>
+        onSubmit={(values) =>
           createProjectMutation({
-            variables: { input: values },
+            variables: { input: deserializeFormDataToProject(values) },
             refetchQueries: [
               {
                 query: ProjectsDocument,
