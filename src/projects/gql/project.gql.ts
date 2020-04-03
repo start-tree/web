@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 export const projectQuery = gql`
-  query Project($id: Float!) {
+  query Project($id: Int!) {
     project(id: $id) {
       id
       title
